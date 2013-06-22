@@ -19,11 +19,21 @@ var mauve = module.exports = {
 		return;
 	}
 
-	var colors = color.split('/');
+	var fg = false;
+	var bg = false;
+	var misc = false;
+	if(color.indexOf('#') > -1) {
+		var colors = color.split('/');
+		var fg = colors[0].length ? hex2Address(colors[0]) : false;
+		var bg = colors[1] ? hex2Address(colors[1]) : false;
+	} else {
+		switch(color) {
+			case 'bold':
+				misc = '\u001B[1m';
+				break;
+		}
+	}
 
-
-	var fg = colors[0].length ? hex2Address(colors[0]) : false;
-	var bg = colors[1] ? hex2Address(colors[1]) : false;
 
 		//When called, overwrite the substring method to ignore the added characters
 	String.prototype.substring = function(start,end) {
@@ -84,6 +94,7 @@ var mauve = module.exports = {
 		var result = '';
 		if(fg) result += '\u001B[38;5;' + fg + 'm';
 		if(bg) result += '\u001B[48;5;' + bg + 'm';
+		if(misc) result += misc;
 		result += raw + '\u001B[0m';
 		return result;
 	});
