@@ -19,13 +19,25 @@ var mauve = module.exports = {
 		return;
 	}
 
-	var rgb = hex2rgbString(color),
-		nums = rgbRegExp.exec(rgb),
-		address = x256(parseInt(nums[1]),parseInt(nums[2]),parseInt(nums[3]));
+	var colors = color.split('/');
+
+
+	var fg = hex2Address(color[0]);
+	var bg = color[1] ? hex2Address(color[1]) : false;
 	
-	console.log(name, address);
+	
 	String.prototype.__defineGetter__(name,function() {
-		return '\u001B[38;5;' + address + 'm' + this + '\u001B[0m';
+		var result = '';
+		result += '\u001B[38;5;' + fg + 'm';
+		if(bg) result += '\u001B[48;5;' + bg + 'm';
+		result += this + '\u001B[0m';
+		return result;
 	});
 	}
 };
+
+function hex2Address(hex) {
+	var rgb = hex2rgbString(hex);
+	var nums = rgbRegExp.exec(rgb);
+	return x256(parseInt(nums[1]),parseInt(nums[2]),parseInt(nums[3]));
+}
