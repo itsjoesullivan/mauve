@@ -1,0 +1,26 @@
+{
+  "name": "mauve",
+  "version": "1.0.2",
+  "description": "Does what colors does, except with hex values boiled down to xterm colors",
+  "main": "index.js",
+  "dependencies": {
+    "rgb": "~0.0.1",
+    "x256": "https://github.com/itsjoesullivan/node-x256/archive/master.tar.gz"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itsjoesullivan/mauve.git"
+  },
+  "keywords": [
+    "mauve",
+    "hex",
+    "rgb",
+    "xterm",
+    "256"
+  ],
+  "author": "Joe Sullivan",
+  "license": "BSD"
+}
