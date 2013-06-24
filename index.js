@@ -3,14 +3,45 @@ var hex2rgbString = require('rgb'),
 	rgbRegExp = /(\d+),(\d+),(\d+)/;
 
 /*
-
 	mauve does colors stuff, but with less error checking + all 256 xterm colors rendered from hex
-
 */
-var mauve = module.exports = {
 
-	// Pass k, v of item name and ideal color
-	set :  function(name,color) 	{
+var mauve;
+
+function getPrefix(scheme) {
+
+
+	//Handle the CSS here TODO: bold
+	return '<span style="' +
+		(scheme.fg ? 'color:' + scheme.fg : '') +
+		(scheme.bg ? 'background-color:' + scheme.bg : '') +
+		'">';
+}
+
+mauve = function(raw) {
+	var freshString = new String(raw);
+	for(var scheme in mauve.hash) {
+		freshString[mauve.hash[scheme].name] = new String(getPrefix(mauve.hash[scheme]) + raw + "</span>");
+		freshString[mauve.hash[scheme].name].substring = function() {
+			return getPrefix(mauve.hash[scheme]) + raw.substring.apply(raw,arguments) + "</span>";	
+		};
+	}
+/*
+	for(var scheme in mauve.hash) {
+		mauve.hash[scheme].name = scheme;
+		raw = addColor(raw,mauve.hash[scheme])
+	}
+	return raw;
+*/
+	return freshString;
+}
+
+mauve.hash = {};
+
+mauve.set = function(name,color) {
+
+
+// Pass k, v of item name and ideal color
 	//Allow setting via a hash, i.e. "set theme"
 	if(typeof name === 'object') {
 		for(var i in name) {
@@ -19,13 +50,19 @@ var mauve = module.exports = {
 		return;
 	}
 
+	var scheme = {};
+
 	var fg = false;
 	var bg = false;
 	var misc = false;
 	if(color.indexOf('#') > -1) {
 		var colors = color.split('/');
 		var fg = colors[0].length ? hex2Address(colors[0]) : false;
+		scheme.fg = colors[0];
 		var bg = colors[1] ? hex2Address(colors[1]) : false;
+		scheme.bg = colors[1];
+		this.hash[name] = scheme
+		this.hash[name].name = name;
 	} else {
 		switch(color) {
 			case 'bold':
@@ -33,6 +70,9 @@ var mauve = module.exports = {
 				break;
 		}
 	}
+
+	//In node, ammend this TODO: kill this in favor of above strategy.
+	if(false && typeof window === 'undefined') { //node
 
 
 		//When called, overwrite the substring method to ignore the added characters
@@ -106,3 +146,6 @@ function hex2Address(hex) {
 	var nums = rgbRegExp.exec(rgb);
 	return x256(parseInt(nums[1]),parseInt(nums[2]),parseInt(nums[3]));
 }
+
+
+module.exports = mauve;
