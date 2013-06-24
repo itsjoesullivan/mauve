@@ -21,11 +21,13 @@ function getPrefix(scheme) {
 
 mauve = function(raw) {
 	var freshString = new String(raw);
+	if(typeof window !== 'undefined') {
 	for(var scheme in mauve.hash) {
 		freshString[mauve.hash[scheme].name] = new String(getPrefix(mauve.hash[scheme]) + raw + "</span>");
 		freshString[mauve.hash[scheme].name].substring = function() {
 			return getPrefix(mauve.hash[scheme]) + raw.substring.apply(raw,arguments) + "</span>";	
 		};
+	}
 	}
 /*
 	for(var scheme in mauve.hash) {
@@ -74,7 +76,7 @@ mauve.set = function(name,color) {
 	}
 
 	//In node, ammend this TODO: kill this in favor of above strategy.
-	if(false && typeof window === 'undefined') { //node
+	if(typeof window === 'undefined') { //node
 
 
 		//When called, overwrite the substring method to ignore the added characters
