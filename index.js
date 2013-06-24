@@ -13,8 +13,9 @@ function getPrefix(scheme) {
 
 	//Handle the CSS here TODO: bold
 	return '<span style="' +
-		(scheme.fg ? 'color:' + scheme.fg : '') +
-		(scheme.bg ? 'background-color:' + scheme.bg : '') +
+		(scheme.fg ? 'color:' + scheme.fg +';': '') +
+		(scheme.bg ? 'background-color:' + scheme.bg +';': '') +
+		(scheme.misc ? 'font-weight:700;': '') +
 		'">';
 }
 
@@ -67,6 +68,7 @@ mauve.set = function(name,color) {
 		switch(color) {
 			case 'bold':
 				misc = '\u001B[1m';
+				this.hash[name] = { misc: 'bold', name: name };
 				break;
 		}
 	}
