@@ -9,8 +9,6 @@ var hex2rgbString = require('rgb'),
 var mauve;
 
 function getPrefix(scheme) {
-
-
 	//Handle the CSS here TODO: bold
 	return '<span style="' +
 		(scheme.fg ? 'color:' + scheme.fg +';': '') +
@@ -29,13 +27,6 @@ mauve = function(raw) {
 		};
 	}
 	}
-/*
-	for(var scheme in mauve.hash) {
-		mauve.hash[scheme].name = scheme;
-		raw = addColor(raw,mauve.hash[scheme])
-	}
-	return raw;
-*/
 	return freshString;
 }
 
